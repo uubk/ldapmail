@@ -1,0 +1,19 @@
+dn: uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}
+changetype: modify
+add: objectClass
+objectClass: mailboxPerson
+-
+add: primaryMail
+primaryMail: {{ item.id }}@{{ ldapmail_postfix_primary_domain }}
+-
+add: mailboxQuota
+mailboxQuota: {{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota) }}
+-
+add: canSendExternally
+canSendExternally: {{ item.canSendExternally|default("TRUE") }}
+-
+add: mailboxTransport
+mailboxTransport: {{ item.mailboxTransport|default(ldapmail_default_transport) }}
+-
+replace: mail
+mail: {{ item.id }}@{{ ldapmail_postfix_primary_domain }}
