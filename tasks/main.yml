@@ -126,3 +126,19 @@
       bind_pw: "{{ ldapmail_bind_pwd }}"
       name: mailboxTransport
       values: "{{ item.mailboxTransport|default(ldapmail_default_transport) }}"
+
+  - name: Create system users
+    run_once: true
+    with_items: "{{ ldapmail_system_mail_users }}"
+    ldap_entry:
+      server_uri: "{{ ldapmail_ldap_ansible_url }}"
+      bind_dn: "{{ ldapmail_bind_dn }}"
+      bind_pw: "{{ ldapmail_bind_pwd }}"
+      dn: "uid={{ item }},ou=Users,{{ ldapmail_ldap_base }}"
+      objectClass: systemMailbox
+      attributes:
+        uid: "{{ item }}"
+        primaryMail: "{{ item }}@{{ ldapmail_mail_base }}"
+        mailboxQuota: '*:storage=10GB'
+        canSendExternally: 'FALSE'
+        mailboxTransport: 'lmtp:unix:private/dovecot-lmtp'
