@@ -12,6 +12,9 @@ mailboxQuota: {{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota)
 add: canSendExternally
 canSendExternally: {{ item.canSendExternally|default("TRUE") }}
 -
+add: canReceiveExternally
+canReceiveExternally: {{ item.canSendExternally|default("TRUE") }}
+-
 add: mailboxTransport
 mailboxTransport: {{ item.mailboxTransport|default(ldapmail_default_transport) }}
 -

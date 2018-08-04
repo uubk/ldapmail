@@ -19,6 +19,11 @@ olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.3 NAME 'sendAlias'
  EQUALITY caseIgnoreIA5Match 
  SUBSTR caseIgnoreIA5SubstringsMatch 
  SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.4 NAME 'virtualDomain' 
+ DESC 'Postfix virtual domain' 
+ EQUALITY caseIgnoreMatch 
+ SUBSTR caseIgnoreSubstringsMatch 
+ SYNTAX 1.3.6.1.4.1.1466.115.121.1.44 )
 olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.5 NAME 'mailboxQuota' 
  DESC 'Mailbox quota rule for this user in Dovecot notation' 
  EQUALITY caseIgnoreMatch 
@@ -30,21 +35,21 @@ olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.6 NAME 'canSendExternally'
  EQUALITY booleanMatch 
  SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
  SINGLE-VALUE )
-olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.4 NAME 'virtualDomain' 
- DESC 'Postfix virtual domain' 
- EQUALITY caseIgnoreMatch 
- SUBSTR caseIgnoreSubstringsMatch 
- SYNTAX 1.3.6.1.4.1.1466.115.121.1.44 )
 olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.7 NAME 'mailboxTransport' 
  DESC 'Postfix mailbox transport method' 
  EQUALITY caseIgnoreMatch 
  SUBSTR caseIgnoreSubstringsMatch 
  SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
  SINGLE-VALUE )
+olcAttributetypes: ( 1.3.6.1.4.1.25725.1.1.8 NAME 'canReceiveExternally' 
+ DESC 'Allow receiving mail from external destinations' 
+ EQUALITY booleanMatch 
+ SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
+ SINGLE-VALUE )
 olcObjectclasses: ( 1.3.6.1.4.1.25725.1.2.1 NAME 'mailboxPerson' 
   DESC 'User who also has a mailbox' 
   SUP top AUXILIARY 
-  MUST ( primaryMail $ mailboxQuota $ canSendExternally $ mailboxTransport ) 
+  MUST ( primaryMail $ mailboxQuota $ canSendExternally $ canReceiveExternally $ mailboxTransport ) 
   MAY ( alias $ sendAlias ) )
 olcObjectclasses: ( 1.3.6.1.4.1.25725.1.2.2 NAME 'mailGroup' 
   DESC 'Group used as a mail alias' 
@@ -58,5 +63,5 @@ olcObjectclasses: ( 1.3.6.1.4.1.25725.1.2.3 NAME 'postfixConfiguration'
 olcObjectclasses: ( 1.3.6.1.4.1.25725.1.2.4 NAME 'systemMailbox' 
   DESC 'System mailbox, does not directly belong to an user' 
   SUP top STRUCTURAL 
-  MUST ( primaryMail $ mailboxQuota $ canSendExternally $ mailboxTransport ) 
+  MUST ( primaryMail $ mailboxQuota $ canSendExternally $ canReceiveExternally $ mailboxTransport ) 
   MAY ( alias $ sendAlias $ uid $ cn ) )

@@ -116,6 +116,17 @@
       name: canSendExternally
       values: '{{ item.canSendExternally|default("TRUE") }}'
 
+  - name: Configure user external receive permissons
+    run_once: true
+    with_items: "{{ ldapmail_mail_users }}"
+    ldap_attr:
+      dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
+      server_uri: "{{ ldapmail_ldap_ansible_url }}"
+      bind_dn: "{{ ldapmail_bind_dn }}"
+      bind_pw: "{{ ldapmail_bind_pwd }}"
+      name: canReceiveExternally
+      values: '{{ item.canReceiveExternally|default("TRUE") }}'
+
   - name: Configure user mailbox transport
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
@@ -141,4 +152,5 @@
         primaryMail: "{{ item }}@{{ ldapmail_mail_base }}"
         mailboxQuota: '*:storage=10GB'
         canSendExternally: 'FALSE'
+        canReceiveExternally: 'FALSE'
         mailboxTransport: 'lmtp:unix:private/dovecot-lmtp'
