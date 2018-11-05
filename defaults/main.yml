@@ -3,8 +3,8 @@ ldapmail_ldap_base: "{{ auth_ldap_domain_ldap }}"
 ldapmail_mail_base: "{{ auth_ldap_domain }}"
 ldapmail_ldap_url: "ldaps://127.0.0.1"
 ldapmail_ldap_ansible_url: "ldaps://127.0.0.1"
-ldapmail_bind_dn: "cn=admin,{{ auth_ldap_domain_ldap }}"
-ldapmail_bind_pwd: "{{ auth_ldap_admin_pwd_clear }}"
+ldapmail_bind_dn: "cn=Directory Manager"
+ldapmail_bind_pwd: "{{ auth_ldap_admin_pwd }}"
 
 ldapmail_postfix_virtual_domains: []
 ldapmail_postfix_primary_domain: None
