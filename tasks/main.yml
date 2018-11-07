@@ -45,6 +45,23 @@
     failed_when: False
     changed_when: False
 
+  - name: Create service account configuration files
+    become: True
+    with_items: "{{ ldapmail_mail_service_users }}"
+    template:
+      src: mailserviceuser.ldif.j2
+      dest: "/etc/ldap/ansible/mail-{{ item.mail }}.ldif"
+      owner: root
+      group: root
+      mode: 0640
+
+  - name: Apply service account configuration files
+    become: True
+    with_items: "{{ ldapmail_mail_service_users }}"
+    shell: /usr/bin/ldapmodify -Z -x -D '{{ ldapmail_bind_dn }}' -w '{{ ldapmail_bind_pwd }}' -H "{{ ldapmail_ldap_url }}" < /etc/ldap/ansible/mail-{{ item.mail }}.ldif
+    failed_when: False
+    changed_when: False
+
   - name: Configure user aliases
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"

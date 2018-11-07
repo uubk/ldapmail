@@ -16,6 +16,7 @@ ldapmail_default_quota: "2MB"
 ldapmail_default_transport: "lmtp:unix:private/dovecot-lmtp"
 
 ldapmail_mail_users: "{{ auth_ldap_users }}"
+ldapmail_mail_service_users: []
 ldapmail_system_mail_users:
   - __spamuser_spam
   - __spamuser_ham

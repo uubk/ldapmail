@@ -20,3 +20,6 @@ mailboxTransport: {{ item.mailboxTransport|default(ldapmail_default_transport) }
 -
 replace: mail
 mail: {{ item.id }}@{{ ldapmail_postfix_primary_domain }}
+-
+add: sendAlias
+sendAlias: {{ item.id }}@{{ ldapmail_postfix_primary_domain }}

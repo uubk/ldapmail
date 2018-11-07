@@ -1,0 +1,25 @@
+dn: uid={{ item.host }},ou=host,ou=TechnicalUsers,{{ ldapmail_ldap_base }}
+changetype: modify
+add: objectClass
+objectClass: mailboxPerson
+-
+add: primaryMail
+primaryMail: {{ item.mail }}@{{ ldapmail_postfix_primary_domain }}
+-
+add: mailboxQuota
+mailboxQuota: *:storage=0B
+-
+add: canSendExternally
+canSendExternally: {{ item.canSendExternally|default("FALSE") }}
+-
+add: canReceiveExternally
+canReceiveExternally: {{ item.canSendExternally|default("FALSE") }}
+-
+add: mailboxTransport
+mailboxTransport: {{ item.mailboxTransport|default("discard:") }}
+-
+replace: mail
+mail: {{ item.mail }}@{{ ldapmail_postfix_primary_domain }}
+-
+add: sendAlias
+sendAlias: {{ item.mail }}@{{ ldapmail_postfix_primary_domain }}
