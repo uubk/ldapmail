@@ -1,4 +1,8 @@
+{% if item.host is defined %}
 dn: uid={{ item.host }},ou=host,ou=TechnicalUsers,{{ ldapmail_ldap_base }}
+{% else %}
+dn: cn={{ item.binduser }},ou=TechnicalUsers,{{ ldapmail_ldap_base }}
+{% endif %}
 changetype: modify
 add: objectClass
 objectClass: mailboxPerson

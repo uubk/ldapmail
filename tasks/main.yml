@@ -45,9 +45,21 @@
     failed_when: False
     changed_when: False
 
-  - name: Create service account configuration files
+  - name: Create service account configuration files (host)
     become: True
     with_items: "{{ ldapmail_mail_service_users }}"
+    when: item.host is defined
+    template:
+      src: mailserviceuser.ldif.j2
+      dest: "/etc/ldap/ansible/mail-{{ item.mail }}.ldif"
+      owner: root
+      group: root
+      mode: 0640
+
+  - name: Create service account configuration files (bindusers)
+    become: True
+    with_items: "{{ ldapmail_mail_service_users }}"
+    when: item.binduser is defined
     template:
       src: mailserviceuser.ldif.j2
       dest: "/etc/ldap/ansible/mail-{{ item.mail }}.ldif"
