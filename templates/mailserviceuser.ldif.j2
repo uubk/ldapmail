@@ -27,3 +27,13 @@ mail: {{ item.mail }}@{{ ldapmail_postfix_primary_domain }}
 -
 add: sendAlias
 sendAlias: {{ item.mail }}@{{ ldapmail_postfix_primary_domain }}
+{% for alias in item.sendAliases | default([]) %}
+sendAlias: {{ alias }}
+{% endfor %}
+{% if item.aliases is defined and item.aliases | length > 0 %}
+-
+add: alias
+{% for alias in item.aliases %}
+alias: {{ alias }}
+{% endfor %}
+{% endif %}
