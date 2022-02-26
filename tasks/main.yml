@@ -20,13 +20,13 @@
 
   - name: Configure Postfix virual domains
     run_once: true
-    ldap_attr:
+    ldap_attrs:
       dn: "cn={{ ldapmail_postfix_cfg_cn }},{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: virtualDomain
-      values: "{{ ldapmail_postfix_virtual_domains }}"
+      attributes:
+        virtualDomain: "{{ ldapmail_postfix_virtual_domains }}"
 
   - name: Create user configuration files
     become: True
@@ -78,69 +78,69 @@
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
     when: item.aliases is defined
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: alias
-      values: "{{ item.aliases }}"
+      attributes:
+        alias: "{{ item.aliases }}"
 
   - name: Configure user send aliases
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
     when: item.sendAliases is defined
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: sendAlias
-      values: "{{ item.sendAliases }}"
+      attributes:
+        sendAlias: "{{ item.sendAliases }}"
 
   - name: Configure user quota
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: mailboxQuota
-      values: '{{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota) }}'
+      attributes:
+        - mailboxQuota: '{{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota) }}'
 
   - name: Configure user external send permissons
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: canSendExternally
-      values: '{{ item.canSendExternally|default("TRUE") }}'
+      attributes:
+        canSendExternally: '{{ item.canSendExternally|default("TRUE") }}'
 
   - name: Configure user external receive permissons
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: canReceiveExternally
-      values: '{{ item.canReceiveExternally|default("TRUE") }}'
+      attributes:
+        canReceiveExternally: '{{ item.canReceiveExternally|default("TRUE") }}'
 
   - name: Configure user mailbox transport
     run_once: true
     with_items: "{{ ldapmail_mail_users }}"
-    ldap_attr:
+    ldap_attrs:
       dn: "uid={{ item.id }},ou=Users,{{ ldapmail_ldap_base }}"
       server_uri: "{{ ldapmail_ldap_ansible_url }}"
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
-      name: mailboxTransport
-      values: "{{ item.mailboxTransport|default(ldapmail_default_transport) }}"
+      attributes:
+        mailboxTransport: "{{ item.mailboxTransport|default(ldapmail_default_transport) }}"
 
   - name: Create system users
     run_once: true
