@@ -107,7 +107,7 @@
       bind_dn: "{{ ldapmail_bind_dn }}"
       bind_pw: "{{ ldapmail_bind_pwd }}"
       attributes:
-        - mailboxQuota: '{{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota) }}'
+        mailboxQuota: '{{ item.mailboxQuota|default("*:storage="+ ldapmail_default_quota) }}'
 
   - name: Configure user external send permissons
     run_once: true
